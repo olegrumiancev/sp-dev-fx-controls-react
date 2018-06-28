@@ -1,3 +1,4 @@
+import { ApplicationCustomizerContext } from '@microsoft/sp-application-base';
 import { IPickerTerms } from './ITermPicker';
 import { ITermStore, IGroup, ITermSet, ITerm } from '../../services/ISPTermStorePickerService';
 import SPTermStorePickerService from '../../services/SPTermStorePickerService';
@@ -26,7 +27,7 @@ export interface ITaxonomyPickerProps  {
   /**
    * WebPart's context
    */
-  context: IWebPartContext;
+  context: IWebPartContext | ApplicationCustomizerContext;
   /**
    * Limit the terms that can be picked by the Term Set name or ID
    */
@@ -39,6 +40,14 @@ export interface ITaxonomyPickerProps  {
    * Specify if the term set itself is selectable in the tree view
    */
   isTermSetSelectable?: boolean;
+  /**
+   * Specify which terms should be disabled in the term set so that they cannot be selected
+   */
+  disabledTermIds?: string[];
+  /**
+   * Specify if you want to disable the child terms when their parent is disabled
+   */
+  disableChildrenOfDisabledParents?: boolean;
   /**
    * Whether the property pane field is enabled or not.
    */
@@ -79,6 +88,8 @@ export interface ITaxonomyPickerState {
 export interface ITermChanges {
   changedCallback: (term: ITerm, checked: boolean) => void;
   activeNodes?: IPickerTerms;
+  disabledTermIds?: string[];
+  disableChildrenOfDisabledParents?: boolean;
 }
 
 
@@ -102,6 +113,7 @@ export interface ITermProps extends ITermChanges {
   termset: string;
   term: ITerm;
   multiSelection: boolean;
+  disabled: boolean;
 }
 
 export interface ITermState {
